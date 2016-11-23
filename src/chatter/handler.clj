@@ -18,7 +18,10 @@
   [messages]
    (page/html5
      [:head
-      [:title "bobby chatter"]]
+      [:title "bobby chatter"]
+      (page/include-css "//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css")
+      (page/include-js  "//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js")
+      (page/include-css "/chatter.css")]
      [:body
       [:h1 "Our Chat App"]
       (form/form-to
@@ -26,7 +29,7 @@
         "Name: " (form/text-field "name")
         "Message: " (form/text-field "msg")
         (form/submit-button "Submit"))
-      [:table
+      [:table#messages.table
       (map (fn [m] [:tr [:td (:name m)] [:td (:message m)]]) messages)]]))
 
 (defroutes app-routes
@@ -37,6 +40,7 @@
               new-messages (update-messages! chat-messages name-param msg-param)]
            (generate-message-view new-messages)
           ))
+  (route/resources "/")
   (route/not-found "Not Found"))
 
 (def app (wrap-params app-routes))
